@@ -6,23 +6,22 @@ COIN_DAEMON='3dcoind'
 COIN_CLI='3dcoin-cli'
 COIN_PATH='/usr/local/bin/'
 COIN_NAME='3dcoin'
-COIN_ZIP=$(echo $COIN_TGZ | awk -F'/' '{print $NF}')
 COIN_PORT=6695
 RPC_PORT=6694
 REL=$(lsb_release -c | awk '{print $2}')
 case $REL in
   xenial*) 
-   COIN_TGZ=
+   COIN_TGZ=https://github.com/ScaMar/3dcoin-masternode-unofficial/raw/master/pack16.zip
    ;;
   bionic*)
-   COIN_TGZ=
+   COIN_TGZ=https://github.com/ScaMar/3dcoin-masternode-unofficial/raw/master/pack18.zip
    ;;
   *)
    echo "Distro with Codename $REL is not supported by this script"
    exit 4
    ;;
 esac
-echo avanti 
+COIN_ZIP=$(echo $COIN_TGZ | awk -F'/' '{print $NF}')
 
 BLUE="\033[0;34m"
 YELLOW="\033[0;33m"
@@ -72,6 +71,7 @@ fi
 }
 
 function source-or-bin() {
+clear
 echo -e "You must choice:"
 echo -e "I trust scamar, so i will install a precompiled daemon ${RED}y${NC}"
 echo -e "I i dont trust scamar, i will build the daemon ${RED}n${NC}"
@@ -85,6 +85,7 @@ case $trust in
    compile_node
    ;;
   *)
+   clear
    echo "Trust, or not. Your choice ${RED}n${NC} is not clear"
    source-or-bin 
    ;;
