@@ -8,19 +8,7 @@ COIN_PATH='/usr/local/bin/'
 COIN_NAME='3dcoin'
 COIN_PORT=6695
 RPC_PORT=6694
-REL=$(lsb_release -c | awk '{print $2}')
-case $REL in
-  xenial*) 
-   COIN_TGZ=https://github.com/ScaMar/3dcoin-masternode-unofficial/raw/master/pack16.zip
-   ;;
-  bionic*)
-   COIN_TGZ=https://github.com/ScaMar/3dcoin-masternode-unofficial/raw/master/pack18.zip
-   ;;
-  *)
-   echo "Distro with Codename $REL is not supported by this script"
-   exit 4
-   ;;
-esac
+COIN_TGZ=https://github.com/ScaMar/3dcoin-masternode-unofficial/raw/master/3dcoin-linux.zip
 COIN_ZIP=$(echo $COIN_TGZ | awk -F'/' '{print $NF}')
 
 BLUE="\033[0;34m"
@@ -41,6 +29,20 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 }
+
+function welcome() {
+clear
+base64 -d <<<"H4sICCgmslsAAzNkY29pbi50eHQAjVC5DQAxDOo9BTLzef/2gOSe5qS4CJhgYgU4rQJGdZ8IwVcMWCm0oAkaBpM20DZYBk1ZK6G3tuB2vISzrE/qv9U3WkChVGqykVaoln6P3jMzO/XsB+oCwu9KXC4BAAA=" | gunzip
+sleep 3
+}
+
+function check_distro() {
+if [[ $(lsb_release -i) != *Ubuntu* ]]; then
+  echo -e "${RED}You are not running Ubuntu. This script is meant for Ubuntu.${NC}"
+  exit 1
+fi
+}
+
 
 function it_exists() {
 if [[ -d $CONFIGFOLDER$IP_SELECT ]]; then
@@ -80,9 +82,11 @@ read -e trust
 case $trust in
   y*)
    download_node
+   3DCBIN=BIN
    ;;
   n*)
    compile_node
+   3DCBIN=SRC
    ;;
   *)
    clear
@@ -372,6 +376,8 @@ function important_information() {
 
 function setup_node() {
   unset NODE_IPS
+  check_distro
+  welcome
   check_user
   check_swap
   source-or-bin
