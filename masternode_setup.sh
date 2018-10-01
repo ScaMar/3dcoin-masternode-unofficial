@@ -33,6 +33,7 @@ fi
 function welcome() {
 clear
 base64 -d <<<"H4sICCgmslsAAzNkY29pbi50eHQAjVC5DQAxDOo9BTLzef/2gOSe5qS4CJhgYgU4rQJGdZ8IwVcMWCm0oAkaBpM20DZYBk1ZK6G3tuB2vISzrE/qv9U3WkChVGqykVaoln6P3jMzO/XsB+oCwu9KXC4BAAA=" | gunzip
+echo -e "${GREEN}Masternode installation script $COIN_NAME ${NC}"
 sleep 3
 }
 
@@ -44,16 +45,20 @@ fi
 }
 
 function check_firewall() {
+clear
 UFWSTATUS=$(ufw status | head -1 | awk '{print $2}')
 case $UFWSTATUS in
 	inactive*)
-		echo '${GREEN}It seems ufw is disabled. Do you want to enable it? (y/n)'
-		read -p ufwenable
+		echo -e "${GREEN}It seems ufw is disabled. Do you want to enable it? (y/n)${NC}"
+		read ufwenable
 		 case $ufwenable in
 		  y*) 
+		   clear
 		   ufw -f enable
 		   declare -a SERVICES=$(netstat -ntpl| grep -v 127.0.[0-1].1 |grep -v '::1' | grep [0-9]|awk '{print $4}'|cut -d":" -f2)
-		   for PORT in ${SERVICES};do echo  "$PORT $(lsof -i:$PORT|tail -1 | awk '{print $1}') is listening on $PORT; enabling ..."; ufw allow $PORT >/dev/null 2>&1; done
+		   for PORT in ${SERVICES};do echo -e "${GREEN} $PORT $(lsof -i:$PORT|tail -1 | awk '{print $1}') is listening on $PORT; enabling ...${NC}"; ufw allow $PORT >/dev/null 2>&1; done
+		   echo -e "${GREEN}Enabling $COIN_PORT ...${NC}"; ufw allow $PORT >/dev/null 2>&1
+		   sleep 5
 		   ;;
 		  n*)
 		   exit
@@ -62,6 +67,7 @@ case $UFWSTATUS in
 		   check_firewall
 		   ;;
 		 esac
+	        ;;	
 	active*)
 		ufw status | grep $COIN_PORT | grep ALLOW >/dev/null 2>&1
         	if [[ $? -eq 0 ]]; then exit
@@ -114,11 +120,11 @@ read -e trust
 case $trust in
   y*)
    download_node
-   3DCBIN=BIN
+   set 3DCBIN=BIN
    ;;
   n*)
    compile_node
-   3DCBIN=SRC
+   set 3DCBIN=SRC
    ;;
   *)
    clear
@@ -412,6 +418,7 @@ function setup_node() {
   welcome
   check_user
   check_swap
+  check_firewall
   source-or-bin
   get_ip
   it_exists
