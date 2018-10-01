@@ -159,18 +159,6 @@ function compile_node() {
 } 
 
 function download_node() {
-  echo -e "${GREEN}Installing dependencies for $COIN_NAME"
-case $REL in
-  xenial*)
-   apt -y install unzip libsodium18 >/dev/null 2>&1
-   ;;
-  bionic*)
-   echo -e "${PURPLE}Adding bitcoin PPA repository"
-   apt-add-repository -y ppa:bitcoin/bitcoin >/dev/null 2>&1
-   apt update >/dev/null 2>&1
-   apt -y install unzip libdb4.8 libdb4.8++ libzmq5 libboost-system1.65.1 libboost-filesystem1.65.1 libboost-program-options1.65.1 libboost-thread1.65.1 libboost-chrono1.65.1 libssl1.1  libminiupnpc10 libevent-pthreads-2.1-6 libevent-2.1-6 libc6 libstdc++6 libgcc1 libsodium23 libnorm1 libpgm-5.2-0 >/dev/null 2>&1
-   ;;
-esac
   echo -e "${GREEN}Downloading and Installing VPS $COIN_NAME Daemon${NC}"
   cd $TMP_FOLDER >/dev/null 2>&1
   wget -q $COIN_TGZ
