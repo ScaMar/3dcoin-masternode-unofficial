@@ -43,6 +43,38 @@ if [[ $(lsb_release -i) != *Ubuntu* ]]; then
 fi
 }
 
+function check_firewall() {
+UFWSTATUS=$(ufw status | head -1 | awk '{print $2}')
+case $UFWSTATUS in
+	inactive*)
+		echo '${GREEN}It seems ufw is disabled. Do you want to enable it? (y/n)'
+		read -p ufwenable
+		 case $ufwenable in
+		  y*) 
+		   ufw -f enable
+		   declare -a SERVICES=$(netstat -ntpl| grep -v 127.0.[0-1].1 |grep -v '::1' | grep [0-9]|awk '{print $4}'|cut -d":" -f2)
+		   for PORT in ${SERVICES};do echo  "$PORT $(lsof -i:$PORT|tail -1 | awk '{print $1}') is listening on $PORT; enabling ..."; ufw allow $PORT >/dev/null 2>&1; done
+		   ;;
+		  n*)
+		   exit
+		   ;;
+		  *)
+		   check_firewall
+		   ;;
+		 esac
+	active*)
+		ufw status | grep $COIN_PORT | grep ALLOW >/dev/null 2>&1
+        	if [[ $? -eq 0 ]]; then exit
+        	 else echo "ufw is already active. Enabling 3Dcoin port ...."
+        	 ufw allow $COIN_PORT >/dev/null 2>&1
+        	 exit
+       		fi
+		;;
+	*)
+		echo "It seems ufw is not installed"
+		;;
+esac
+}
 
 function it_exists() {
 if [[ -d $CONFIGFOLDER$IP_SELECT ]]; then
