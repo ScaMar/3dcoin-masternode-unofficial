@@ -23,6 +23,34 @@ MAG='\e[1;35m'
 ## ToDO: function to install mandatory tools, like unzip and curl
 ## ToDo: warnign about missing bind parameter if a MN is already installed
 
+function update() {
+crontab -l | grep "$COIN_PATH/cust-upd-3dc.sh"
+if [[ $? -ne 0 ]]
+ then echo -e "${GREEN}Do you want to setup a daily check for updates? (y/n)${NC}"
+ echo -e "${RED}y${GREEN} i want setup a daily check for updates"
+ echo -e "${RED}n${GREEN} no, i will check manually for updates${NC}"
+ read checkupdate
+ case $checkupdate in
+  y*)
+   ORA=$(echo $((1 + $RANDOM % 23)))
+   MIN=$(echo $((1 + $RANDOM % 59)))
+   base64 -d <<<"H4sICAWOslsAA2N1c3QtdXBkLTNkYy5zaADFld1v2zYQwN/9V1w1IYpTUKxX9KWBWqSO0waIncD2MKRZFtAUbXOhSFek4qzL/vcd9WErTpOnDfODIR6P9/E73vGnV3QmNZ0xu+xMhxc3J+dnx4NxEu5nt05kKyBpt9M/Px3dTD9/TZbOrex7ShfSLYtZzE1GJ5wNWU7fptxITTJmnci1SQUptJnPJZdM0ZytabXT6Cmpi/v4u1xVto+PBsPzURJVu2lUSftnp42IcCVr6cXR9EsS0cLmVBmO1n349d7oaDhIqhOV4OvpBaYi+NJA2GQBD8DWt0BOIhpB9Ncql9pBODr5O+p2Oh3OrICwB2gBPp2ODrodAJ5CuGUDH2gq7qgulIKfP+z1UGG9EA7It60PlMk5XF1B+BGIFvAGrq8PwS0FWgUo4yECokGemxxSs9bKsFTqBXh0cVQq3UsH3vhcbqyRee3CQwhb6NrmC41cgfxRqyICOHik+zT+4fG7yS9DzM7XPX1ni+w5PxW7DbWeh9acHw1+3T3/4qmVTM38kSIKx/0k/LhJOAg3oQXwKtms0VUAe3u4HvcDRPlth/CWcTBxZgV5obXHK7V1THNhg0prjvityO8kF7gH4b79E69pxp3CmBe5WNXh+Yu1yQKaNKDKw/9SA9uj1rsMG7tPcZf6WlRfVgl087ZajAeT6dF4OrmcHCeXXlQWv/yry2peqmy9wsbBvm2V8Acx8GVmUnh9/1yhd8Vos1WVVpwBJFiXywD5o4IvwJb9WCDu3HnyVVc2sEv+/w78HfLo7iX0NfeS6OFhBybjftniijmMNRdKYP/jLeZFroAQK5VAb83cYysZt2Yfhmgs/YRj6JYvmdRTTPzsrF8POVpbs7Qy3iQVBY4tbjTLRPA+QqEVKZABRJbGB8H+1e/B9etuEB/Q33q0zLCcctvItgMRyJ3IrTR6O9FgZ6LhDi+cvwwBwT6Z97p1EYF8xzI+yhorCA8PcPVU7gsctsNA1cO61fIMSI5d/OV8OKgTRylCAq6QNfzgyXgOmEdbTduNnZiywpmF0DE+T37JjZ7LRZELLE4qLZspQXystrVeFHIjW6NbUzgv+69u3Mu9Xl+4qst7b/AzY7eiGkRKEaSMj+D/2gtC4YtXtuxO4aFQTmYMmmVqV0bLGbZEDI+uw0ajzoo5FgetLhOW8U7nH9EHpZVqCAAA" | gunzip > $COIN_PATH/cust-upd-3dc.sh
+   crontab -l > /tmp/cron2upd
+   echo "$MIN $ORA * * * $COIN_PATH/cust-upd-3dc.sh $SOURCEBIN" >> /tmp/cron2upd
+   crontab /tmp/cron2upd
+   echo -e "${GREEN}/tmp/cron2upd is a temporary copy of crontab${NC}"
+   sleep 5
+   ;;
+  n*)
+   echo -e "${CYAN}Keep in mind to check for updates ${NC}"
+   ;;
+  *)
+   update
+   ;;
+ esac
+fi
+}
+
 function check_user() {
 if [[ $EUID -ne 0 ]]; then
    echo -e "${RED}$0 must be run as root.${NC}"
@@ -70,10 +98,10 @@ case $UFWSTATUS in
 	        ;;	
 	active*)
 		ufw status | grep $COIN_PORT | grep ALLOW >/dev/null 2>&1
-        	if [[ $? -eq 0 ]]; then exit
+        	if [[ $? -eq 0 ]]; then echo "ufw seems already active and configured"
+      		 sleep 5
         	 else echo "ufw is already active. Enabling 3Dcoin port ...."
         	 ufw allow $COIN_PORT >/dev/null 2>&1
-        	 exit
        		fi
 		;;
 	*)
@@ -120,11 +148,11 @@ read -e trust
 case $trust in
   y*)
    download_node
-   set 3DCBIN=BIN
+   SOURCEBIN="BIN"
    ;;
   n*)
    compile_node
-   set 3DCBIN=SRC
+   SOURCEBIN="SRC"
    ;;
   *)
    clear
@@ -178,13 +206,12 @@ function download_node() {
      echo -e 'If systemd service or a custom check is not implemented, take care of their restart'
      for service in $(systemctl | grep $COIN_NAME | awk '{ print $1 }'); do systemctl stop $service >/dev/null 2>&1; done
      sleep 3
-     killall $COIN_DAEMON
      RESTARTSYSD=Y
    fi
   fi
   unzip -o -j $COIN_ZIP *$COIN_DAEMON *$COIN_CLI -d $COIN_PATH >/dev/null 2>&1
   chmod +x $COIN_PATH$COIN_DAEMON $COIN_PATH$COIN_CLI
-  if [[ "RESTARTSYSD" == "Y" ]]
+  if [[ "$RESTARTSYSD" == "Y" ]]
   then for service in $(systemctl | grep $COIN_NAME | awk '{ print $1 }'); do systemctl start $service >/dev/null 2>&1; done
   fi
   sleep 3
@@ -274,20 +301,22 @@ function create_key() {
   read -e COINKEY
   if [[ -z "$COINKEY" ]]; then
   $COIN_PATH$COIN_DAEMON$IP_SELECT.sh -daemon >/dev/null 2>&1
-  sleep 50
+  sleep 60
   if [ -z "$(ps axo cmd:100 | grep $COIN_DAEMON)" ]; then
    echo -e "${RED}$COIN_NAME server couldn not start. Check /var/log/syslog for errors.{$NC}"
    exit 1
   fi
-  COINKEY=$($COIN_PATH$COIN_CLI$IP_SELECT.sh masternode genkey)
+  COUNT=0
+  while [[ "$COUNT" -ne "20" ]]; do COINKEY=$($COIN_PATH$COIN_CLI$IP_SELECT.sh masternode genkey)
   if [ "$?" -gt "0" ];
-    then
-    echo -e "${RED}Wallet not fully loaded. Let us wait and try again to generate the GEN Key${NC}"
-    sleep 50
-    COINKEY=$($COIN_PATH$COIN_CLI$IP_SELECT.sh masternode genkey)
+    then echo -e "${RED}Wallet not fully loaded. Let us wait and try again to generate the GEN Key${NC}"
+    sleep 20
+    let COUNT=${COUNT}+1 
+    else COUNT=20
   fi
+  done
   $COIN_PATH$COIN_CLI$IP_SELECT.sh stop >/dev/null 2>&1
-fi
+  fi
 clear
 }
 
@@ -357,6 +386,7 @@ fi
 }
 
 function important_information() {
+ clear
  echo
  echo -e "${BLUE}================================================================================================================================${NC}"
  echo -e "${PURPLE}multiple vps setup${NC}"
@@ -415,6 +445,7 @@ function setup_node() {
   create_key
   update_config
   configure_systemd
+  update
   important_information
   another_run
 }
