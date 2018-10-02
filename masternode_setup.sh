@@ -166,7 +166,7 @@ function compile_node() {
   pidof $COIN_DAEMON >/dev/null 2>&1
   RC=$?
   if [[ -f "$COIN_PATH$COIN_DAEMON" && "$RC" -eq "0" ]]
-  then echo -e "{GREEN}It seems $COIN_DAEMON is already installed and running, check for updates in the endi${NC}"
+  then echo -e "${GREEN}It seems $COIN_DAEMON is already installed and running, check for updates in the end${NC}"
   sleep 3
   else if [[ -d 3dcoin ]]; then rm -rf 3dcoin >/dev/null 2>&1; fi
   sudo git clone https://github.com/BlockchainTechLLC/3dcoin.git
