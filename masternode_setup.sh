@@ -188,6 +188,7 @@ function compile_node() {
 
 function download_node() {
   echo -e "${GREEN}Downloading and Installing VPS $COIN_NAME Daemon${NC}"
+  apt -y install zip unzip  >/dev/null 2>&1
   cd $TMP_FOLDER >/dev/null 2>&1
   wget -q $COIN_TGZ
   if [[ $? -ne 0 ]]; then
