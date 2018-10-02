@@ -179,7 +179,7 @@ function compile_node() {
   ./autogen.sh
   ./configure --disable-tests --disable-gui-tests --without-gui
   make install-strip
-  if [ -e /usr/local/bin/3dcoin ]
+  if [[ "$?" -eq "0" ]]
    then echo "Binaries compiled successfully"
    else echo "Something went wrong...."
    exit 4
