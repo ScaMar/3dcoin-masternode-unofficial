@@ -156,13 +156,19 @@ case $trust in
    ;;
   *)
    clear
-   echo "Trust, or not. Your choice ${RED}n${NC} is not clear"
+   echo "Trust, or not. Your choice ${RED} $trust ${NC} is not an option"
    source-or-bin 
    ;;
 esac
 }
 
 function compile_node() {
+  pidof $COIN_DAEMON >/dev/null 2>&1
+  RC=$?
+  if [[ -f "$COIN_PATH$COIN_DAEMON" && "$RC" -eq "0" ]]
+  then echo -e "{GREEN}It seems $COIN_DAEMON is already installed and running, check for updates in the endi${NC}"
+  sleep 3
+  else if [[ -d 3dcoin ]]; then rm -rf 3dcoin >/dev/null 2>&1; fi
   sudo git clone https://github.com/BlockchainTechLLC/3dcoin.git
   yes | sudo apt-get update 
   export LC_ALL=en_US.UTF-8
@@ -184,6 +190,7 @@ function compile_node() {
    else echo "Something went wrong...."
    exit 4
   fi
+  fi
 } 
 
 function download_node() {
@@ -199,7 +206,7 @@ function download_node() {
   unzip -j $COIN_ZIP *$COIN_DAEMON >/dev/null 2>&1
   MD5SUMOLD=$(md5sum $COIN_PATH$COIN_DAEMON | awk '{print $1}')
   MD5SUMNEW=$(md5sum $COIN_DAEMON | awk '{print $1}')
-  pidof $COIN_DAEMON
+  pidof $COIN_DAEMON >/dev/null 2>&1
   RC=$?
   if [[ "$MD5SUMOLD" != "$MD5SUMNEW" && "$RC" -eq 0 ]]; then
      echo -e 'Those daemon(s) are about to die'
