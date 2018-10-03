@@ -20,8 +20,35 @@ GREEN="\033[0;32m"
 NC='\033[0m'
 MAG='\e[1;35m'
 
-## ToDO: function to install mandatory tools, like unzip and curl
 ## ToDo: warnign about missing bind parameter if a MN is already installed
+
+function apt_update() {
+echo
+echo -e "${GREEN}Checking and installing operating system updates. It may take awhile ...${NC}"
+apt-get update >/dev/null 2>&1
+apt-get -y dist-upgrade >/dev/null 2>&1 
+apt-get -y install zip unzip curl >/dev/null 2>&1
+apt-get -y autoremove >/dev/null 2>&1
+if [[ -f /var/run/reboot-required ]]
+  then echo -e "${RED}Warning:${NC}${GREEN}some updates require a reboot${NC}"
+  echo -e "${GREEN}Do you want to reboot at the end of masternode installation process?${NC}"
+  echo -e "${GREEN}(${NC}${RED} y ${NC} ${GREEN}/${NC}${RED} n ${NC}${GREEN})${NC}"
+  read rebootsys
+  case $rebootsys in
+   y*)
+    REBOOTSYS=y
+    ;;
+   n*)
+    REBOOTSYS=n
+    ;;
+   *)
+    echo -e "${GREEN}Your choice,${NC}${CYAN} $rebootsys${NC},${GREEN} is not valid. Assuming${NC}${RED} n ${NC}"
+    REBOOTSYS=n
+    sleep 5
+    ;;
+  esac
+fi
+}
 
 function update() {
 crontab -l | grep "$COIN_PATH/cust-upd-3dc.sh"
@@ -393,7 +420,15 @@ echo -e "If you want to install another masternode, please type ${RED}y${NC}"
 echo -e "Any other key will close such script"
 read -e another
 if [[ "$another" != "y" ]]
-  then echo -e "Good bye!"
+  then if [[ "$REBOOTSYS" == "y" ]]
+   then echo -e "Good bye!"
+   sleep 3
+   shutdown -r now
+   fi
+   if [[ "$REBOOTSYS" == "n" && -f /var/run/reboot-required ]]
+   then echo -e "${RED}Keep in mind, this server still need a reboot${NC}"
+   fi
+   echo "Good bye!"
   else setup_node
 fi
 }
