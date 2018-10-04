@@ -483,6 +483,7 @@ function setup_node() {
   check_distro
   welcome
   check_user
+  apt_update
   check_swap
   check_firewall
   source-or-bin
