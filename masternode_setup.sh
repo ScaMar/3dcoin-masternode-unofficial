@@ -26,9 +26,9 @@ function apt_update() {
 echo
 echo -e "${GREEN}Checking and installing operating system updates. It may take awhile ...${NC}"
 apt-get update >/dev/null 2>&1
-apt-get -y dist-upgrade >/dev/null 2>&1 
-apt-get -y install zip unzip curl >/dev/null 2>&1
-apt-get -y autoremove >/dev/null 2>&1
+DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade >/dev/null 2>&1 
+DEBIAN_FRONTEND=noninteractive apt-get -y install zip unzip curl >/dev/null 2>&1
+DEBIAN_FRONTEND=noninteractive apt-get -y autoremove >/dev/null 2>&1
 if [[ -f /var/run/reboot-required ]]
   then echo -e "${RED}Warning:${NC}${GREEN}some updates require a reboot${NC}"
   echo -e "${GREEN}Do you want to reboot at the end of masternode installation process?${NC}"
