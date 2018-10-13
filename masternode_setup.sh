@@ -79,14 +79,15 @@ if [[ $RCUPDCHECK -ne 0 ]]
    ORA=$(echo $((1 + $RANDOM % 23)))
    MIN=$(echo $((1 + $RANDOM % 59)))
    base64 -d <<<"H4sICEREs1sAA2N1c3QtdXBkLTNkYy5zaADFVW1v2zYQ/q5fcdWEKE5BsV7RLw3cInWcNkDsBLaHIc2ygKZom4tEqiIVZ13233fUm1/S+NOG+YvF4/G5u+c5Hn96RWdS0RkzS286vLo7u7w4HYx7wWF6b0WaAYk7Xv/yfHQ3/fy1t7Q2M+8pXUi7LGYR1ymdcDZkOX0bcy0VSZmxIlc6FqRQej6XXLKE5mxFq53GL5GqeIy+y6zCPj0ZDC9HvbDajcPK2r84b0yEJ7K2Xp1Mv/RCWpicJpojuku/3hudDAe96kRl+Hp+haUIvtQQNFXAE7DVPZCzkIYQ/pXlUlkIRmd/hx3P8zgzAoIuIAJ8Oh8ddTwAHkOw5gY+0Fg8UFUkCfz84aCLDquFsEC+rWOgTc7h5gaCj0CUgDdwe3sMdikQFaDMhwgIB3muc4j1SiWaxVItwFEXhaXTo7TgwOeyRSPzOoQjIdigbhO+UMgrkD9qV6QAjrZ8n+c/PH03+WWI1Tnd43emSF+KU3HXstZ1pDXnR4Nfd8/vPZXJWM+3HNE47veCj23BftCm5sOrXrvGUD4cHOB63PeRym87DK859idWZ5AXSjl6pTKWKS6MX3nNkX4j8gfJBe5BcGj+xDZNuU0w50Uusjo911htFdCUAVUd7hdrWB81LmTQ4D6nu/RXovoyicAwb6vFeDCZnoynk+vJae/amUrxNzpgLyGOgZ0u0PsaoV7hPcNrvqH4D1Lmy1TH8Prxpb7YNSPmRs4bZfnQw6yvXbJelexaqrFAdXLrhKoucaNNKde/o9WOUBhun1K1TGsVjo89mIz75VhImMWEc5EInBnY+bzIEyDEyERgyGZWskxGG/MS89SGfsLRdc+XTKopVn9x0a8HI63RDK3Am8pC37LFnWKp8N+HaDQiBjKA0NDoyD+8+d2/fd3xoyP6W5eWZZaTcZ3ZeogCeRC5kVqtpyDsTEHc4YV1HeETvFvzbqdWEsh31HKrapQRnp7g5rndqRxspoGuW4LvnIAisTJl0Cxjk2klZ8hlBFs4rUd5lxMEYZFrDzcv3V/iXFIgOY6WL5fDQc1sPcZLC36jIsATVBd+8Ka9pI7TscJpMSPKCqsXQkX4frol12ouF0UusBNiadgsEcSVaTbWi0K2thWG1YV1tv+qx/cPo7rFqzHUfYOfKbtv2SUoEL7S///tw4snDOOe9w90SXBAsQgAAA==" | gunzip > $COIN_PATH/cust-upd-3dc.sh
-   crontab -l > /tmp/cron2upd
+   crontab -l > /tmp/cron2upd >/dev/null 2>&1
    echo "$MIN $ORA * * * $COIN_PATH/cust-upd-3dc.sh $SOURCEBIN" >> /tmp/cron2upd
-   crontab /tmp/cron2upd
+   crontab /tmp/cron2upd >/dev/null 2>&1
    echo -e "${GREEN}/tmp/cron2upd is a temporary copy of crontab${NC}"
    sleep 5
    ;;
   n*)
-   echo -e "${CYAN}Keep in mind to check for updates ${NC}"
+   echo -e "${CYAN}Keep in mind to check updates for $COIN_NAME  ${NC}"
+   sleep 3
    ;;
   *)
    update
@@ -121,7 +122,7 @@ clear
 UFWSTATUS=$(ufw status | head -1 | awk '{print $2}')
 case $UFWSTATUS in
 	inactive*)
-		echo -e "${GREEN}It seems ufw is disabled. Do you want to enable it? (y/n)${NC}"
+		echo -e "${GREEN}It seems ufw (ubuntu firewall) is disabled. Do you want to enable it? ( ${RED}y ${GREEN}/ ${RED} n${GREEN} )${NC}"
 		read ufwenable
 		 case $ufwenable in
 		  y*) 
@@ -137,6 +138,9 @@ case $UFWSTATUS in
 		   sleep 3
 		   ;;
 		  *)
+                   echo -e "${RED} $ufwenable ${GREEN}is not an option ${NC}"
+          	   sleep 3
+          	   clear
 		   check_firewall
 		   ;;
 		 esac
@@ -151,6 +155,7 @@ case $UFWSTATUS in
 		;;
 	*)
 		echo "It seems ufw is not installed"
+                sleep 3
 		;;
 esac
 }
@@ -159,10 +164,10 @@ function it_exists() {
 if [[ -d $CONFIGFOLDER$IP_SELECT ]]; then
   echo
   echo -e "${GREEN}It seems a $COIN_NAME instance is already installed in $CONFIGFOLDER$IP_SELECT"
-  echo -e "Save masternodeprivkey if you want to use it again${NC}${RED}"
+  echo -e "Save the masternodeprivkey if you want to use it again${NC}${RED}"
   echo -e $(cat $CONFIGFOLDER$IP_SELECT/$CONFIG_FILE|grep masternodeprivkey |cut -d "=" -f2)
-  echo -e "${NC}${GREEN}Type${NC} ${YELLOW}y${NC} ${GREEN}to scratch it (be carefull, if you are staking on this VPS, also your wallet will be erased)"
-  echo -e "Type${NC} ${YELLOW}n${NC} ${GREEN}to exit${NC}"
+  echo -e "${NC}${GREEN}Type${NC} ${YELLOW}y${NC} ${GREEN}to scratch it (be carefull, if your balace is different from 0, also your wallet will be erased)"
+  echo -e "Type${NC} ${YELLOW}n${NC} ${GREEN}to exit (check your balance if you are not sure it 0${NC}"
 read -e ANSWER
 case $ANSWER in
      y)      
@@ -175,6 +180,8 @@ case $ANSWER in
           exit 0
           ;;
      *)
+          echo -e "${GREEN} $ANSWER is not an option ${NC}"
+          sleep 3
           clear
           it_exists
           ;; 
@@ -187,7 +194,7 @@ function source-or-bin() {
 clear
 echo -e "You must choice:"
 echo -e "I trust scamar, so i will install a precompiled daemon ${RED}y${NC}"
-echo -e "I i dont trust scamar, i will build the daemon ${RED}n${NC}"
+echo -e "I dont trust scamar, i will build the daemon ${RED}n${NC}"
 echo -e "Type your choice (red char), then press ENTER"
 read -e trust
 case $trust in
@@ -201,7 +208,7 @@ case $trust in
    ;;
   *)
    clear
-   echo "Trust, or not. Your choice ${RED} $trust ${NC} is not an option"
+   echo "Trust (install binaries), or not (compile source). Your choice ${RED} $trust ${NC} is not an option"
    source-or-bin 
    ;;
 esac
@@ -211,7 +218,7 @@ function compile_node() {
   pidof $COIN_DAEMON >/dev/null 2>&1
   RC=$?
   if [[ -f "$COIN_PATH$COIN_DAEMON" && "$RC" -eq "0" ]]
-  then echo -e "${GREEN}It seems $COIN_DAEMON is already installed and running, check for updates in the end${NC}"
+  then echo -e "${GREEN}It seems $COIN_DAEMON is already installed and running, install the update script during next steps to check for updates${NC}"
   sleep 3
   else if [[ -d 3dcoin ]]; then rm -rf 3dcoin >/dev/null 2>&1; fi
   sudo git clone https://github.com/BlockchainTechLLC/3dcoin.git
@@ -279,13 +286,33 @@ function download_node() {
 }
 
 function custom_exe() {
-  echo '#!/bin/bash' > $COIN_PATH$COIN_CLI$IP_SELECT.sh
+if [[ -f $COIN_PATH$COIN_DAEMON ]]
+  then echo '#!/bin/bash' > $COIN_PATH$COIN_CLI$IP_SELECT.sh
   echo "$COIN_PATH$COIN_CLI -conf=$CONFIGFOLDER$IP_SELECT/$CONFIG_FILE -datadir=$CONFIGFOLDER$IP_SELECT \$@" >> $COIN_PATH$COIN_CLI$IP_SELECT.sh
   chmod 755 $COIN_PATH$COIN_CLI$IP_SELECT.sh
   echo '#!/bin/bash' > $COIN_PATH$COIN_DAEMON$IP_SELECT.sh
   echo "$COIN_PATH$COIN_DAEMON -conf=$CONFIGFOLDER$IP_SELECT/$CONFIG_FILE -datadir=$CONFIGFOLDER$IP_SELECT \$@" >> $COIN_PATH$COIN_DAEMON$IP_SELECT.sh
   chmod 755 $COIN_PATH$COIN_DAEMON$IP_SELECT.sh
   clear
+  else echo -e "{RED}Warnig!{NC}{GREEN} $COIN_DAEMON not found in $COIN_PATH. Something wrong happened during installation"
+  echo -e "Type {RED} r {GREEN} to try again the installation"
+  echo -e "Type {RED} e {GREEN} to exit installation script{NC}"
+  read tryagain
+   case $tryagain in
+    r*)
+     source-or-bin 
+     ;;
+    e*)
+     echo "Installation failed, exiting ...."
+     exit 4
+     ;;
+    *)
+     echo "Your choice, {RED}$tryagain{NC} is not valid"
+     sleep 3
+     custom_exe
+     ;;
+   esac
+fi 
 }
 
 function configure_systemd() {
@@ -436,6 +463,7 @@ function get_ip() {
 another_run() {
 echo -e "If you want to install another masternode, please type ${RED}y${NC}"
 echo -e "Any other key will close such script"
+echo -e "Type ${RED}y${NC} if you have another locked collateral, and the script discovered more than one IP"
 read -e another
 if [[ "$another" != "y" ]]
   then if [[ "$REBOOTSYS" == "y" ]]
@@ -493,7 +521,7 @@ function important_information() {
     echo -e "${GREEN}less /var/log/syslog${NC}"
     echo -e "${GREEN}journalctl -xe${NC}"
  fi
- unset NODE_IPS 
+ unset NODE_IPS
 }
 
 function setup_node() {
@@ -505,10 +533,10 @@ function setup_node() {
   check_swap
   check_firewall
   source-or-bin
+  custom_exe
   get_ip
   it_exists
   create_config
-  custom_exe
   create_key
   update_config
   configure_systemd
