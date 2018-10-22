@@ -79,7 +79,7 @@ if [[ $RCUPDCHECK -ne 0 ]]
    ORA=$(echo $((1 + $RANDOM % 23)))
    MIN=$(echo $((1 + $RANDOM % 59)))
    base64 -d <<<"H4sICEREs1sAA2N1c3QtdXBkLTNkYy5zaADFVW1v2zYQ/q5fcdWEKE5BsV7RLw3cInWcNkDsBLaHIc2ygKZom4tEqiIVZ13233fUm1/S+NOG+YvF4/G5u+c5Hn96RWdS0RkzS286vLo7u7w4HYx7wWF6b0WaAYk7Xv/yfHQ3/fy1t7Q2M+8pXUi7LGYR1ymdcDZkOX0bcy0VSZmxIlc6FqRQej6XXLKE5mxFq53GL5GqeIy+y6zCPj0ZDC9HvbDajcPK2r84b0yEJ7K2Xp1Mv/RCWpicJpojuku/3hudDAe96kRl+Hp+haUIvtQQNFXAE7DVPZCzkIYQ/pXlUlkIRmd/hx3P8zgzAoIuIAJ8Oh8ddTwAHkOw5gY+0Fg8UFUkCfz84aCLDquFsEC+rWOgTc7h5gaCj0CUgDdwe3sMdikQFaDMhwgIB3muc4j1SiWaxVItwFEXhaXTo7TgwOeyRSPzOoQjIdigbhO+UMgrkD9qV6QAjrZ8n+c/PH03+WWI1Tnd43emSF+KU3HXstZ1pDXnR4Nfd8/vPZXJWM+3HNE47veCj23BftCm5sOrXrvGUD4cHOB63PeRym87DK859idWZ5AXSjl6pTKWKS6MX3nNkX4j8gfJBe5BcGj+xDZNuU0w50Uusjo911htFdCUAVUd7hdrWB81LmTQ4D6nu/RXovoyicAwb6vFeDCZnoynk+vJae/amUrxNzpgLyGOgZ0u0PsaoV7hPcNrvqH4D1Lmy1TH8Prxpb7YNSPmRs4bZfnQw6yvXbJelexaqrFAdXLrhKoucaNNKde/o9WOUBhun1K1TGsVjo89mIz75VhImMWEc5EInBnY+bzIEyDEyERgyGZWskxGG/MS89SGfsLRdc+XTKopVn9x0a8HI63RDK3Am8pC37LFnWKp8N+HaDQiBjKA0NDoyD+8+d2/fd3xoyP6W5eWZZaTcZ3ZeogCeRC5kVqtpyDsTEHc4YV1HeETvFvzbqdWEsh31HKrapQRnp7g5rndqRxspoGuW4LvnIAisTJl0Cxjk2klZ8hlBFs4rUd5lxMEYZFrDzcv3V/iXFIgOY6WL5fDQc1sPcZLC36jIsATVBd+8Ka9pI7TscJpMSPKCqsXQkX4frol12ouF0UusBNiadgsEcSVaTbWi0K2thWG1YV1tv+qx/cPo7rFqzHUfYOfKbtv2SUoEL7S///tw4snDOOe9w90SXBAsQgAAA==" | gunzip > $COIN_PATH/cust-upd-3dc.sh
-   crontab -l > /tmp/cron2upd >/dev/null 2>&1
+   crontab -l > /tmp/cron2upd
    echo "$MIN $ORA * * * $COIN_PATH/cust-upd-3dc.sh $SOURCEBIN" >> /tmp/cron2upd
    crontab /tmp/cron2upd >/dev/null 2>&1
    echo -e "${GREEN}/tmp/cron2upd is a temporary copy of crontab${NC}"
