@@ -537,7 +537,7 @@ function setup_node() {
 #  check_swap
 #  check_firewall
   source-or-bin
-#  custom_exe
+  custom_exe
   get_ip
 #  it_exists
   create_config
