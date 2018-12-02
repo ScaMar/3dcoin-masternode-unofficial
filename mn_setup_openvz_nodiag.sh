@@ -33,7 +33,8 @@ if [[ -f /var/run/reboot-required ]]
   then echo -e "${RED}Warning:${NC}${GREEN}some updates require a reboot${NC}"
   echo -e "${GREEN}Do you want to reboot at the end of masternode installation process?${NC}"
   echo -e "${GREEN}(${NC}${RED} y ${NC} ${GREEN}/${NC}${RED} n ${NC}${GREEN})${NC}"
-  read rebootsys
+#  read rebootsys
+  rebootsys="n"
   case $rebootsys in
    y*)
     REBOOTSYS=y
@@ -74,7 +75,8 @@ if [[ $RCUPDCHECK -ne 0 ]]
  then echo -e "${GREEN}Do you want to setup a daily update check for $COIN_NAME executables? (y/n)${NC}"
  echo -e "${RED}y${GREEN} i want setup a daily check for updates"
  echo -e "${RED}n${GREEN} no, i will check manually for updates${NC}"
- read checkupdate
+# read checkupdate
+ checkupdate="y"
  case $checkupdate in
   y*)
    ORA=$(echo $((1 + $RANDOM % 23)))
@@ -197,7 +199,8 @@ echo -e "You must choice:"
 echo -e "I trust scamar, so i will install a precompiled daemon ${RED}y${NC}"
 echo -e "I dont trust scamar, i will build the daemon ${RED}n${NC}"
 echo -e "Type your choice (red char), then press ENTER"
-read -e trust
+#read -e trust
+trust="y"
 case $trust in
   y*)
    download_node
@@ -430,7 +433,7 @@ function get_ip() {
   declare -a NODE_IPS
   for ips in $(ip a | grep inet | awk '{print $2}' | cut -f1 -d "/")
   do
-    NODE_IPS+=($(curl --interface $ips --connect-timeout 4 -sk https://v4.ident.me/))
+    NODE_IPS+=($(curl --interface $ips --connect-timeout 30 -sk https://v4.ident.me/))
   done
 
   if [ ${#NODE_IPS[@]} -gt 1 ]
@@ -488,8 +491,8 @@ function important_information() {
  echo -e "${BLUE}================================================================================================================================${NC}"
  echo -e "${GREEN}$COIN_NAME Masternode is up and running listening on port: ${NC}${RED}$COIN_PORT${NC}."
  echo -e "${GREEN}Configuration file is: ${NC}${RED}$CONFIGFOLDER$IP_SELECT/$CONFIG_FILE${NC}"
- echo -e "${GREEN}VPS_IP: ${NC}${RED}$NODEIP:$COIN_PORT${NC}"
- echo -e "${GREEN}MASTERNODE GENKEY is: ${NC}${RED}$COINKEY${NC}"
+ echo -e "${GREEN}VPS_IP: ${NC}${RED}$NODEIP:$COIN_PORT${NC}" >> /root/info
+ echo -e "${GREEN}MASTERNODE GENKEY is: ${NC}${RED}$COINKEY${NC}" >> /root/info
  echo -e "${BLUE}================================================================================================================================"
  echo -e "${CYAN}Stop, start and check your $COIN_NAME instance${NC}"
  echo -e "${BLUE}================================================================================================================================${NC}"
@@ -531,12 +534,12 @@ function setup_node() {
   welcome
   check_user
   apt_update
-  check_swap
-  check_firewall
+#  check_swap
+#  check_firewall
   source-or-bin
-  custom_exe
+#  custom_exe
   get_ip
-  it_exists
+#  it_exists
   create_config
   create_key
   update_config
