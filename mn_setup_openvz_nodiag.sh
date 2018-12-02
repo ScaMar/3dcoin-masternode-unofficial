@@ -387,7 +387,7 @@ EOF
 function create_key() {
   echo -e "${YELLOW}Enter your ${RED}$COIN_NAME Masternode GEN Key${NC}"
   echo -e "${YELLOW}Press enter to let the script generate one${NC}"
-  read -e COINKEY
+  #read -e COINKEY
   if [[ -z "$COINKEY" ]]; then
   $COIN_PATH$COIN_DAEMON$IP_SELECT.sh -daemon >/dev/null 2>&1
   sleep 60
