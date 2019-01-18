@@ -534,8 +534,8 @@ function setup_node() {
   check_swap
   check_firewall
   source-or-bin
-  custom_exe
   get_ip
+  custom_exe
   it_exists
   create_config
   create_key
