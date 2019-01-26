@@ -45,10 +45,7 @@ if [[ $? -eq 0 ]]
  fi
 fi
 if [[ $RCUPDCHECK -ne 0 ]]
- then echo -e "${GREEN}Do you want to setup a daily update check for $COIN_NAME executables? (y/n)${NC}"
- echo -e "${RED}y${GREEN} i want setup a daily check for updates"
- echo -e "${RED}n${GREEN} no, i will check manually for updates${NC}"
- read checkupdate
+ checkupdate=y
  case $checkupdate in
   y*)
    ORA=$(echo $((1 + $RANDOM % 23)))
