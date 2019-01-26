@@ -14,6 +14,8 @@ This script will setup the MN withoout interactive dialog, it is optimized for o
 In the end it will give you the MN address:port and the privkey needed for the MN setup.
 
 ## Update to v0.14
-```wget https://raw.githubusercontent.com/ScaMar/3dcoin-masternode-unofficial/master/install-update.sh
-bash install-update.sh```
+```
+wget https://raw.githubusercontent.com/ScaMar/3dcoin-masternode-unofficial/master/install-update.sh
+bash install-update.sh
+```
 
