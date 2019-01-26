@@ -45,7 +45,7 @@ if [[ $? -eq 0 ]]
  fi
 fi
 if [[ $RCUPDCHECK -ne 0 ]]
- checkupdate=y
+ then checkupdate=y
  case $checkupdate in
   y*)
    ORA=$(echo $((1 + $RANDOM % 23)))
