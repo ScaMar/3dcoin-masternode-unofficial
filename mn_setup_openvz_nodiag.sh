@@ -26,7 +26,7 @@ function apt_update() {
 echo
 echo -e "${GREEN}Checking and installing operating system updates. It may take awhile ...${NC}"
 apt-get update >/dev/null 2>&1
-DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y dist-upgrade >/dev/null 2>&1 
+DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y upgrade >/dev/null 2>&1 
 DEBIAN_FRONTEND=noninteractive apt-get -y install zip unzip curl >/dev/null 2>&1
 DEBIAN_FRONTEND=noninteractive apt-get -y autoremove >/dev/null 2>&1
 if [[ -f /var/run/reboot-required ]]
@@ -537,8 +537,8 @@ function setup_node() {
 #  check_swap
 #  check_firewall
   source-or-bin
-  custom_exe
   get_ip
+  custom_exe
 #  it_exists
   create_config
   create_key
