@@ -25,12 +25,10 @@ fi
 crontab -l | grep "$COIN_PATH/daemon_check.sh" >/dev/null 2>&1
 RCUPDCHECK=$?
 if [[ $RCUPDCHECK -ne 0 ]]
- then ORA=$(echo $((1 + $RANDOM % 23)))
- MIN=$(echo $((1 + $RANDOM % 59)))
- base64 -d <<<"H4sICBpQWFwAA2RhZW1vbl9jaGVjay5zaAC1Ul1r20AQfNev2KqGNFDp+gGlbtGDStK44CYB2/TBmHK+W9lHTnfq3SqpafLfu7LSRinEbxWCvZkb7YyWff5MrI0Taxm3yeTi62khgveUTC/OzktGe3BZzieFaGMQ1itpReQvPgzwHvbk35sHDR+SaXl+VqD7vpjli/nn7H0ym5xOp8Xemo0vv53c+yZNwGvj2/iJW18VoxdKEgiqG7HuCOVbR8eJakNAR380b7XyxmXKGtggDYX8mAqWkI4e9U2hKJgbtklh9RFoiy4BiLtIWCuyEMk30LfveIvYwLtXfAw1ZBXsM4u8F/AMnTWRci3pCUXtlFRbPKho5K7mUPGAyCFVra2MtagPyDSu201u/eaJ+77ovDGaFfcIsoBc8CdkmZZY+39+fDYv54vZ46HXLu6c4mFJaiPcwiawuowR6csJQ3lzBUe/mmAcwejN3RFTqiXINKQvU471+pj73myNRVguYdQ7QOYQxuMxrFZ8C9oPQ/y3FOzjkGu3NIMo+GMQpVsSGPh2O9Lxw3zDDZKBHlaoMgm/vwFXXSHxdQMAAA==" | gunzip > $COIN_PATH/daemon_check.sh
+ then base64 -d <<<"H4sICBpQWFwAA2RhZW1vbl9jaGVjay5zaAC1Ul1r20AQfNev2KqGNFDp+gGlbtGDStK44CYB2/TBmHK+W9lHTnfq3SqpafLfu7LSRinEbxWCvZkb7YyWff5MrI0Taxm3yeTi62khgveUTC/OzktGe3BZzieFaGMQ1itpReQvPgzwHvbk35sHDR+SaXl+VqD7vpjli/nn7H0ym5xOp8Xemo0vv53c+yZNwGvj2/iJW18VoxdKEgiqG7HuCOVbR8eJakNAR380b7XyxmXKGtggDYX8mAqWkI4e9U2hKJgbtklh9RFoiy4BiLtIWCuyEMk30LfveIvYwLtXfAw1ZBXsM4u8F/AMnTWRci3pCUXtlFRbPKho5K7mUPGAyCFVra2MtagPyDSu201u/eaJ+77ovDGaFfcIsoBc8CdkmZZY+39+fDYv54vZ46HXLu6c4mFJaiPcwiawuowR6csJQ3lzBUe/mmAcwejN3RFTqiXINKQvU471+pj73myNRVguYdQ7QOYQxuMxrFZ8C9oPQ/y3FOzjkGu3NIMo+GMQpVsSGPh2O9Lxw3zDDZKBHlaoMgm/vwFXXSHxdQMAAA==" | gunzip > $COIN_PATH/daemon_check.sh
  chmod +x $COIN_PATH/daemon_check.sh
  crontab -l > /tmp/cron2upd
- echo "$MIN $ORA * * * $COIN_PATH/daemon_check.sh" >> /tmp/cron2upd
+ echo "*/10 * * * * $COIN_PATH/daemon_check.sh" >> /tmp/cron2upd
  crontab /tmp/cron2upd >/dev/null 2>&1
  sleep 5
 fi
