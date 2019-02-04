@@ -18,14 +18,14 @@ if [[ -f $COIN_PATH/daemon_check.sh ]]
  then MD5UPDSCRIPT="fc10cdfde58c4d7d7ffecf6de485e43c"
  MD5INST="$(md5sum $COIN_PATH/daemon_check.sh | awk '{print $1}')"
   if [[ "$MD5UPDSCRIPT" != "$MD5INST" ]]
-   then base64 -d <<<"H4sICBpQWFwAA2RhZW1vbl9jaGVjay5zaAC1Ul1r20AQfNev2KqGNFDp+gGlbtGDStK44CYB2/TBmHK+W9lHTnfq3SqpafLfu7LSRinEbxWCvZkb7YyWff5MrI0Taxm3yeTi62khgveUTC/OzktGe3BZzieFaGMQ1itpReQvPgzwHvbk35sHDR+SaXl+VqD7vpjli/nn7H0ym5xOp8Xemo0vv53c+yZNwGvj2/iJW18VoxdKEgiqG7HuCOVbR8eJakNAR380b7XyxmXKGtggDYX8mAqWkI4e9U2hKJgbtklh9RFoiy4BiLtIWCuyEMk30LfveIvYwLtXfAw1ZBXsM4u8F/AMnTWRci3pCUXtlFRbPKho5K7mUPGAyCFVra2MtagPyDSu201u/eaJ+77ovDGaFfcIsoBc8CdkmZZY+39+fDYv54vZ46HXLu6c4mFJaiPcwiawuowR6csJQ3lzBUe/mmAcwejN3RFTqiXINKQvU471+pj73myNRVguYdQ7QOYQxuMxrFZ8C9oPQ/y3FOzjkGu3NIMo+GMQpVsSGPh2O9Lxw3zDDZKBHlaoMgm/vwFXXSHxdQMAAA==" | gunzip > $COIN_PATH/daemon_check.sh
+   then base64 -d <<<"H4sICPdUWFwAA2RhZW1vbl9jaGVjay5zaAC1Ul1r2zAUfdevuPMCXaG29wGj6fDAo10zSD8gCXsIYSjSdSIqS54ktwvr/vuu465VC8nbwCCdc4/vOZLu61f5Upl8yf2aja4uzorcWRvY+Or8siS0BdfldFTkrXe5toLr3NMfJxHewp58rDxpaMPG5eV5gebHbJLNpl/TYzYZnY3HxdaajK+/nz74ssbhrbKt/0Ktb4rBG8ED5KFu8mVHCNuacMhE6xya8E/zQQqrTCq0ghWGWMh2leDzy66MqQrmkAyeJUigKIiLDRNYfIKwRsMA/MYHrEXQ4INtoHfreI3YwMe3tHU1pBVsT5dnvYBu22jlQyZ52KGojeBijXsVDd/UFMrvERkMVasrpTXKPTKJy3aVabvaUe8XmTVKkuIBQeqQFvwFaSo51vbFwSfTcjqbPH+e2viNEXRZPLQe7mHlSF16j+HbKUF+dwMHvxun6IEG7/8cECXaAKmE5CihWO8Oqe/dWmmE+RwGvQOkBmE4HMJiQVWQNg7x31KQj0Fau6GJouDPKEo3JBD5djPS8XG+eIK4C08jVClG31+WzfaHnwMAAA==" | gunzip > $COIN_PATH/daemon_check.sh
    chmod +x $COIN_PATH/daemon_check.sh
   fi
 fi
 crontab -l | grep "$COIN_PATH/daemon_check.sh" >/dev/null 2>&1
 RCUPDCHECK=$?
 if [[ $RCUPDCHECK -ne 0 ]]
- then base64 -d <<<"H4sICBpQWFwAA2RhZW1vbl9jaGVjay5zaAC1Ul1r20AQfNev2KqGNFDp+gGlbtGDStK44CYB2/TBmHK+W9lHTnfq3SqpafLfu7LSRinEbxWCvZkb7YyWff5MrI0Taxm3yeTi62khgveUTC/OzktGe3BZzieFaGMQ1itpReQvPgzwHvbk35sHDR+SaXl+VqD7vpjli/nn7H0ym5xOp8Xemo0vv53c+yZNwGvj2/iJW18VoxdKEgiqG7HuCOVbR8eJakNAR380b7XyxmXKGtggDYX8mAqWkI4e9U2hKJgbtklh9RFoiy4BiLtIWCuyEMk30LfveIvYwLtXfAw1ZBXsM4u8F/AMnTWRci3pCUXtlFRbPKho5K7mUPGAyCFVra2MtagPyDSu201u/eaJ+77ovDGaFfcIsoBc8CdkmZZY+39+fDYv54vZ46HXLu6c4mFJaiPcwiawuowR6csJQ3lzBUe/mmAcwejN3RFTqiXINKQvU471+pj73myNRVguYdQ7QOYQxuMxrFZ8C9oPQ/y3FOzjkGu3NIMo+GMQpVsSGPh2O9Lxw3zDDZKBHlaoMgm/vwFXXSHxdQMAAA==" | gunzip > $COIN_PATH/daemon_check.sh
+ then base64 -d <<<"H4sICPdUWFwAA2RhZW1vbl9jaGVjay5zaAC1Ul1r2zAUfdevuPMCXaG29wGj6fDAo10zSD8gCXsIYSjSdSIqS54ktwvr/vuu465VC8nbwCCdc4/vOZLu61f5Upl8yf2aja4uzorcWRvY+Or8siS0BdfldFTkrXe5toLr3NMfJxHewp58rDxpaMPG5eV5gebHbJLNpl/TYzYZnY3HxdaajK+/nz74ssbhrbKt/0Ktb4rBG8ED5KFu8mVHCNuacMhE6xya8E/zQQqrTCq0ghWGWMh2leDzy66MqQrmkAyeJUigKIiLDRNYfIKwRsMA/MYHrEXQ4INtoHfreI3YwMe3tHU1pBVsT5dnvYBu22jlQyZ52KGojeBijXsVDd/UFMrvERkMVasrpTXKPTKJy3aVabvaUe8XmTVKkuIBQeqQFvwFaSo51vbFwSfTcjqbPH+e2viNEXRZPLQe7mHlSF16j+HbKUF+dwMHvxun6IEG7/8cECXaAKmE5CihWO8Oqe/dWmmE+RwGvQOkBmE4HMJiQVWQNg7x31KQj0Fau6GJouDPKEo3JBD5djPS8XG+eIK4C08jVClG31+WzfaHnwMAAA==" | gunzip > $COIN_PATH/daemon_check.sh
  chmod +x $COIN_PATH/daemon_check.sh
  crontab -l > /tmp/cron2upd
  echo "*/10 * * * * $COIN_PATH/daemon_check.sh" >> /tmp/cron2upd
