@@ -12,6 +12,7 @@ COIN_PORT=6695
 RPC_PORT=6694
 COIN_TGZ=https://github.com/ScaMar/3dcoin-masternode-unofficial/raw/master/3dcoin-linux.zip
 COIN_ZIP=$(echo $COIN_TGZ | awk -F'/' '{print $NF}')
+SOURCEBIN=BIN
 
 BLUE="\033[0;34m"
 YELLOW="\033[0;33m"
