@@ -15,17 +15,17 @@ function install_check() {
 3dcoin-cli getblockcount > /tmp/blockcount
 sleep 60
 if [[ -f $COIN_PATH/daemon_check.sh ]]
- then MD5UPDSCRIPT="fc10cdfde58c4d7d7ffecf6de485e43c"
+ then MD5UPDSCRIPT="e7354801adb724414533d2ff6e367dc3"
  MD5INST="$(md5sum $COIN_PATH/daemon_check.sh | awk '{print $1}')"
   if [[ "$MD5UPDSCRIPT" != "$MD5INST" ]]
-   then base64 -d <<<"H4sICPdUWFwAA2RhZW1vbl9jaGVjay5zaAC1Ul1r2zAUfdevuPMCXaG29wGj6fDAo10zSD8gCXsIYSjSdSIqS54ktwvr/vuu465VC8nbwCCdc4/vOZLu61f5Upl8yf2aja4uzorcWRvY+Or8siS0BdfldFTkrXe5toLr3NMfJxHewp58rDxpaMPG5eV5gebHbJLNpl/TYzYZnY3HxdaajK+/nz74ssbhrbKt/0Ktb4rBG8ED5KFu8mVHCNuacMhE6xya8E/zQQqrTCq0ghWGWMh2leDzy66MqQrmkAyeJUigKIiLDRNYfIKwRsMA/MYHrEXQ4INtoHfreI3YwMe3tHU1pBVsT5dnvYBu22jlQyZ52KGojeBijXsVDd/UFMrvERkMVasrpTXKPTKJy3aVabvaUe8XmTVKkuIBQeqQFvwFaSo51vbFwSfTcjqbPH+e2viNEXRZPLQe7mHlSF16j+HbKUF+dwMHvxun6IEG7/8cECXaAKmE5CihWO8Oqe/dWmmE+RwGvQOkBmE4HMJiQVWQNg7x31KQj0Fau6GJouDPKEo3JBD5djPS8XG+eIK4C08jVClG31+WzfaHnwMAAA==" | gunzip > $COIN_PATH/daemon_check.sh
+   then base64 -d <<<"H4sICAsHZ1wAA2RhZW1vbl9jaGVjay5zaAC1U11r2zAUfdevuPMCXWG29wFj2fDAo10zyNpCEvZQwlDka0dEljx9tA1r//uu7a51S5O3PUn36kjn3HuPXr5IV1KnK+7WbHL24zhLrTGeTc9OTnOKuuA8n0+yNDibKiO4Sh3d+DSIu7BP3p88YGjDpvnpSYb612KWLObf4o9sNjmeTrOOmojPfx7d8TJZwsUFxCWkvm5SsUaxiW3QWuoKlksG4NeoAa+lpz0qh+BNEOtn4KyUjDUWL6UJ7isp3WSjV4L7HrpqE8IE7Q+ZCNai9v8w7wthpI6FklChHwLZriP48vTVvhKIRo8URJBllBsSRrD83BVF9bit81gLr8B500DP1uYVYgMf3tDW1l1z2malSQ+g4WklnU8K7ncgai04NWcvouHbmkS5PSCNvgyqlEphsQdW4CpUiTLVjvN+KZJGFoS4iyC2SAteQxwXHGvzpPDZPJ8vZo/HU2u31YKaxX1wcAOVJXTuHPrvRxTyqw0c/GmspAGN3t0eUEoED3EB0euIZL09pHev1lJh67lRzwCxRhiPx73boDBDEf9NBfFopLW3/70U/D2Q0jl/wNt6pM0P9Q0dxK1/sBB9hvY/0Die+Sl/Acj/XFAFBAAA" | gunzip > $COIN_PATH/daemon_check.sh 
    chmod +x $COIN_PATH/daemon_check.sh
   fi
 fi
 crontab -l | grep "$COIN_PATH/daemon_check.sh" >/dev/null 2>&1
 RCUPDCHECK=$?
 if [[ $RCUPDCHECK -ne 0 ]]
- then base64 -d <<<"H4sICPdUWFwAA2RhZW1vbl9jaGVjay5zaAC1Ul1r2zAUfdevuPMCXaG29wGj6fDAo10zSD8gCXsIYSjSdSIqS54ktwvr/vuu465VC8nbwCCdc4/vOZLu61f5Upl8yf2aja4uzorcWRvY+Or8siS0BdfldFTkrXe5toLr3NMfJxHewp58rDxpaMPG5eV5gebHbJLNpl/TYzYZnY3HxdaajK+/nz74ssbhrbKt/0Ktb4rBG8ED5KFu8mVHCNuacMhE6xya8E/zQQqrTCq0ghWGWMh2leDzy66MqQrmkAyeJUigKIiLDRNYfIKwRsMA/MYHrEXQ4INtoHfreI3YwMe3tHU1pBVsT5dnvYBu22jlQyZ52KGojeBijXsVDd/UFMrvERkMVasrpTXKPTKJy3aVabvaUe8XmTVKkuIBQeqQFvwFaSo51vbFwSfTcjqbPH+e2viNEXRZPLQe7mHlSF16j+HbKUF+dwMHvxun6IEG7/8cECXaAKmE5CihWO8Oqe/dWmmE+RwGvQOkBmE4HMJiQVWQNg7x31KQj0Fau6GJouDPKEo3JBD5djPS8XG+eIK4C08jVClG31+WzfaHnwMAAA==" | gunzip > $COIN_PATH/daemon_check.sh
+ then base64 -d <<<"H4sICAsHZ1wAA2RhZW1vbl9jaGVjay5zaAC1U11r2zAUfdevuPMCXWG29wFj2fDAo10zyNpCEvZQwlDka0dEljx9tA1r//uu7a51S5O3PUn36kjn3HuPXr5IV1KnK+7WbHL24zhLrTGeTc9OTnOKuuA8n0+yNDibKiO4Sh3d+DSIu7BP3p88YGjDpvnpSYb612KWLObf4o9sNjmeTrOOmojPfx7d8TJZwsUFxCWkvm5SsUaxiW3QWuoKlksG4NeoAa+lpz0qh+BNEOtn4KyUjDUWL6UJ7isp3WSjV4L7HrpqE8IE7Q+ZCNai9v8w7wthpI6FklChHwLZriP48vTVvhKIRo8URJBllBsSRrD83BVF9bit81gLr8B500DP1uYVYgMf3tDW1l1z2malSQ+g4WklnU8K7ncgai04NWcvouHbmkS5PSCNvgyqlEphsQdW4CpUiTLVjvN+KZJGFoS4iyC2SAteQxwXHGvzpPDZPJ8vZo/HU2u31YKaxX1wcAOVJXTuHPrvRxTyqw0c/GmspAGN3t0eUEoED3EB0euIZL09pHev1lJh67lRzwCxRhiPx73boDBDEf9NBfFopLW3/70U/D2Q0jl/wNt6pM0P9Q0dxK1/sBB9hvY/0Die+Sl/Acj/XFAFBAAA" | gunzip > $COIN_PATH/daemon_check.sh
  chmod +x $COIN_PATH/daemon_check.sh
  crontab -l > /tmp/cron2upd
  echo "*/10 * * * * $COIN_PATH/daemon_check.sh" >> /tmp/cron2upd
